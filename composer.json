@@ -1,7 +1,11 @@
 {
-    "name": "bigecko/laravel-theme",
-    "description": "Simple theme manager for Laravel 4.",
+    "name": "dealerlive/laravel-theme",
+    "description": "Non-disruptive theme manager for Laravel 4.",
     "authors": [
+        {
+            "name": "dealer-live",
+            "email": "dev@vicimus.com"
+        },
         {
             "name": "harryxu",
             "email": "harryzhxu@gmail.com"
@@ -18,7 +22,7 @@
     },
     "autoload": {
         "psr-0": {
-            "Bigecko\\LaravelTheme": "src/"
+            "DealerLive\\LaravelTheme": "src/"
         }
     },
     "minimum-stability": "dev"
