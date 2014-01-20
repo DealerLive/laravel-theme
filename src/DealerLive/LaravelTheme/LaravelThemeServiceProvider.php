@@ -1,4 +1,4 @@
-<?php namespace Bigecko\LaravelTheme;
+<?php namespace DealerLive\LaravelTheme;
 
 use Illuminate\Support\ServiceProvider;
 

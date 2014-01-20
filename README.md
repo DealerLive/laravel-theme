@@ -10,11 +10,11 @@ Composer require:
 
 Service provider:
 
-    'Bigecko\LaravelTheme\LaravelThemeServiceProvider',
+    'DealerLive\LaravelTheme\LaravelThemeServiceProvider',
 
 Alias:
 
-    'Theme' => 'Bigecko\LaravelTheme\Facade',
+    'Theme' => 'DealerLive\LaravelTheme\Facade',
 
 ## Usage
 

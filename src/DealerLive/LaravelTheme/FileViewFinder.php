@@ -1,4 +1,4 @@
-<?php namespace Bigecko\LaravelTheme;
+<?php namespace DealerLive\LaravelTheme;
 
 class FileViewFinder extends \Illuminate\View\FileViewFinder
 {
