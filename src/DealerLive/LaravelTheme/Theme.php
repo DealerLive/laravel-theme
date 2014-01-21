@@ -37,13 +37,9 @@ class Theme
 
     protected function updateFinder()
     {
-        // add theme hints to existing namespaces
-        foreach ($this->finder->getHints() as $namespace => $hints) {
-            $this->finder->prependNamespace($namespace, $this->viewPath() . '/' . $namespace);
-        }
-
         // add theme views path
-        $this->finder->prependLocation($this->viewPath());
+        \View::addLocation($this->viewPath());
+        //$this->finder->prependLocation($this->viewPath());
     }
 
     /**
