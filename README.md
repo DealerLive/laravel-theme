@@ -6,7 +6,7 @@ Inspired by [lightgear/theme](https://github.com/lightgear/theme), but not depen
 
 Composer require:
 
-    "bigecko/laravel-theme": "dev-master"
+    "dealer-live/laravel-theme": "dev-master"
 
 Service provider:
 
