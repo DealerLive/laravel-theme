@@ -71,4 +71,18 @@ class Theme
         return public_path($this->options['public_dirname'] . '/' . $this->name()
                     . (empty($path) ? '' : '/' . rtrim($path)));
     }
+
+    public static function getLanguageToggle()
+    {
+        if(!class_exists('\DealerLive\Cms\CmsmlServiceProvider'))
+            return null;
+
+        $markup = null;
+        if(\App::getLocale() == "fr")
+            $markup = '<a href="'.\URL::route('language', 'en').'" class="lang-toggle">View In English</a>';
+        else
+            $markup = '<a href="'.\URL::route('language', 'fr').'" class="lang-toggle">View In French</a>';
+        
+        return $markup;
+    }
 }
