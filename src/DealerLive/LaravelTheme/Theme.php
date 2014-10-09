@@ -85,4 +85,12 @@ class Theme
         
         return $markup;
     }
+
+    public static function navigation()
+    {
+        if(file_exists(public_path().'/themes/yields/'.\App::getLocale().'_nav.blade.php'))
+            include (public_path().'/themes/yields/'.\App::getLocale().'_nav.blade.php');
+        elseif(file_exists(public_path().'/themes/yields/nav.blade.php'))
+            include (public_path().'/themes/yields/nav.blade.php');
+    }
 }
