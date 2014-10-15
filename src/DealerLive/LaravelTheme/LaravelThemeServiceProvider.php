@@ -29,6 +29,15 @@ class LaravelThemeServiceProvider extends ServiceProvider {
             $theme = new Theme($app['view.finder']);
             return $theme;
         });
+
+       \Event::listen('reporting.goals.triggers', function(){
+            return array(
+                'social_facebook' => 'Facebook social icon click',
+                'social_twitter' => 'Twitter social icon click',
+                'social_google_plus' => 'Google Plus social icon click',
+                'social_youtube' => 'Youtube social icon click'
+                );
+        });
     }
 
     /**
