@@ -1,4 +1,8 @@
-<?php namespace DealerLive\LaravelTheme;
+<?php
+
+namespace DealerLive\LaravelTheme;
+
+use \DealerLive\Config\Helper;
 
 class Theme
 {
@@ -92,5 +96,22 @@ class Theme
             include (public_path().'/themes/yields/'.\App::getLocale().'_nav.blade.php');
         elseif(file_exists(public_path().'/themes/yields/nav.blade.php'))
             include (public_path().'/themes/yields/nav.blade.php');
+    }
+
+    public static function social($specific = null)
+    {
+        $result = null;
+        $social = array(
+            'facebook' => 'facebook.png',
+            'twitter' => 'twitter.png',
+            'google_plus' => 'google.png',
+            'youtube' => 'youtube.png'
+        );
+
+        foreach($social as $socialName => $icon)
+            if(((!is_null($specific) && $specific == $socialName) || is_null($specific)) && Helper::check($socialName))
+                $result .= '<a href="'.Helper::check($socialName).'" data-goal="social_'.$socialName.'"><img src="'.\Theme::asset('img/icons/'.$icon).'"></a>';
+        
+        return $result;
     }
 }
