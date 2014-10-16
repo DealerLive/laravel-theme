@@ -110,7 +110,7 @@ class Theme
 
         foreach($social as $socialName => $icon)
             if(((!is_null($specific) && $specific == $socialName) || is_null($specific)) && Helper::check($socialName))
-                $result .= '<a href="'.Helper::check($socialName).'" data-goal="social_'.$socialName.'"><img src="'.\Theme::asset('img/icons/'.$icon).'"></a>';
+                $result .= '<a target="_blank" href="'.Helper::check($socialName).'" data-goal="social_'.$socialName.'"><img src="'.\Theme::asset('img/icons/'.$icon).'"></a>';
         
         return $result;
     }
