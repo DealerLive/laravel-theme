@@ -114,4 +114,10 @@ class Theme
         
         return $result;
     }
+
+    public static function content($blade, $params = array())
+    {
+        if(\View::exists('Theme::content.'.$blade))
+            return \View::make('Theme::content.'.$blade, compact('params'));
+    }
 }
