@@ -38,6 +38,8 @@ class LaravelThemeServiceProvider extends ServiceProvider {
                 'social_youtube' => 'Youtube social icon click'
                 );
         });
+
+       \View::addNamespace('Theme', __DIR__.'/../../views/');
     }
 
     /**
