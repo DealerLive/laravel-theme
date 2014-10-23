@@ -98,6 +98,7 @@ function isSelected($object, $description = null, $value = null)
 
 <div class="listing-navigation">
 	<div class="listing-navigation-title">
+		<h5>{{ \DealerLive\Config\Helper::check('store_name') }}</h5>
 		<h3>{{ucfirst($type)}} Vehicles</h3>
 	</div>
 
