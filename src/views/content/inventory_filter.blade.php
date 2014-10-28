@@ -7,8 +7,8 @@ $type = (array_key_exists('type', $params)) ? $params['type'] : "all";
 $showCounts = (array_key_exists('counts', $params)) ? $params['counts'] : false;
 $min = Helpers::get_min_price(\Request::get('make'), \Request::get('model'), $type);
 $max = Helpers::get_max_price(\Request::get('make'), \Request::get('model'), $type);
-$trims = \Request::has('model') ? Helpers::get_trims(\Request::get('model')) : array();
-$transmissions = \Request::has('model') ? Helpers::get_transmissions(\Request::get('model'), \Request::get('trim')) : array();
+$trims = \Request::has('model') ? Helpers::get_trims(\Request::get('model'), $type) : array();
+$transmissions = \Request::has('model') ? Helpers::get_transmissions(\Request::get('model'), \Request::get('trim'), $type) : array();
 
 //Collect all the values into an array for use with
 //some Helper methods, specifically the price range method
