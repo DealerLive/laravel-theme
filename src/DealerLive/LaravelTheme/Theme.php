@@ -85,7 +85,7 @@ class Theme
         if(\App::getLocale() == "fr")
             $markup = '<a href="'.\URL::route('language', 'en').'" class="lang-toggle">View In English</a>';
         else
-            $markup = '<a href="'.\URL::route('language', 'fr').'" class="lang-toggle">View In French</a>';
+            $markup = '<a href="'.\URL::route('language', 'fr').'" class="lang-toggle">Voir en Français</a>';
         
         return $markup;
     }
