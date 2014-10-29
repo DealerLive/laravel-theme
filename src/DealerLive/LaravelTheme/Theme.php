@@ -6,6 +6,12 @@ use \DealerLive\Config\Helper;
 
 class Theme
 {
+
+    private static function layoutDir()
+    {
+        return __DIR__.'/../../views/';
+    }
+
     private $theme;
 
     protected $finder;
@@ -119,5 +125,41 @@ class Theme
     {
         if(\View::exists('Theme::content.'.$blade))
             return \View::make('Theme::content.'.$blade, compact('params'));
+    }
+
+    public function getLayouts()
+    {
+        $path = Theme::viewPath().'/layouts';
+
+        $results = scandir($path);
+        $blacklist = array('.', '..', '.DS_Store');
+        $layoutFiles = array_diff($results, $blacklist);
+
+        $json = file_get_contents(Theme::publicPath().'/../layouts.json');
+        $layoutData = json_decode($json);
+        $layouts = array();
+        foreach($layoutData as $l)
+        {
+            if(self::isvalidLayout($l, $layoutFiles))
+                $layouts[] = $l;
+        }
+
+        return $layouts;
+    }
+
+    public static function isValidLayout(\stdClass $layout, $fileList)
+    {
+        foreach($fileList as $file)
+        {
+            if($file == $layout->file)
+                return true;
+        }
+
+        return false;
+    }
+
+    public static function layoutViewName($layoutFile)
+    {
+        return str_replace('.blade.php', '', $layoutFile);
     }
 }
