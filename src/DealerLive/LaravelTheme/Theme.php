@@ -91,7 +91,7 @@ class Theme
         if(\App::getLocale() == "fr")
             $markup = '<a href="'.\URL::route('language', 'en').'" class="lang-toggle">View In English</a>';
         else
-            $markup = '<a href="'.\URL::route('language', 'fr').'" class="lang-toggle">Voir en Français</a>';
+            $markup = '<a href="'.\URL::route('language', 'fr').'" class="lang-toggle">Voir en français</a>';
         
         return $markup;
     }
@@ -111,7 +111,9 @@ class Theme
             'facebook' => 'facebook.png',
             'twitter' => 'twitter.png',
             'google_plus' => 'google.png',
-            'youtube' => 'youtube.png'
+            'youtube' => 'youtube.png',
+            'pinterest' => 'pinterest.png',
+            'instagram' => 'instagram.png'
         );
 
         foreach($social as $socialName => $icon)

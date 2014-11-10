@@ -188,19 +188,29 @@ function isSelected($object, $description = null, $value = null)
 		<h5>Price</h5>
 		<select>
 		<option value="{{getRequest('price', '')}}">All Prices</option>
-		@if($min < 10000 && Helpers::vehiclesInRange(null, 10000, $requests))
-			<option value="{{getRequest('price', null, '10000')}}" @if(isSelected(null, 'max', '10000')) selected @endif>
-				Less Than $10,000 {{($showCounts) ? '('.Helpers::vehiclesInRange(null, 10000, $requests).')' : ''}}
+		@if($min < 9999 && Helpers::vehiclesInRange(null, 9999, $requests))
+			<option value="{{getRequest('price', null, '9999')}}" @if(isSelected(null, 'max', '9999')) selected @endif>
+				$0 - $9,999 {{($showCounts) ? '('.Helpers::vehiclesInRange(null, 9999, $requests).')' : ''}}
 			</option>
 		@endif
-		@if($min < 20000 && $max >= 10000 && Helpers::vehiclesInRange(10000, 20000, $requests))
-			<option value="{{getRequest('price', '10000', '20000')}}" @if(isSelected(null, 'max', '20000')) selected @endif>
-				$10,000 - $20,000 {{($showCounts) ? '('.Helpers::vehiclesInRange(10000, 20000, $requests).')' : ''}}
+		@if($min < 14999 && $max >= 10000 && Helpers::vehiclesInRange(10000, 14999, $requests))
+			<option value="{{getRequest('price', '10000', '14999')}}" @if(isSelected(null, 'max', '14999')) selected @endif>
+				$10,000 - $14,999 {{($showCounts) ? '('.Helpers::vehiclesInRange(10000, 14999, $requests).')' : ''}}
 			</option>
 		@endif
-		@if($min < 30000 && $max >= 20000 && Helpers::vehiclesInRange(20000, 30000, $requests))
-			<option value="{{getRequest('price', '20000', '30000')}}" @if(isSelected(null, 'max', '30000')) selected @endif>
-				$20,000 - $30,000 {{($showCounts) ? '('.Helpers::vehiclesInRange(20000, 30000, $requests).')' : ''}}
+		@if($min < 19999 && $max >= 15000 && Helpers::vehiclesInRange(15000, 19999, $requests))
+			<option value="{{getRequest('price', '15000', '19999')}}" @if(isSelected(null, 'max', '19999')) selected @endif>
+				$15,000 - $19,999 {{($showCounts) ? '('.Helpers::vehiclesInRange(15000, 19999, $requests).')' : ''}}
+			</option>
+		@endif
+		@if($min < 24999 && $max >= 20000 && Helpers::vehiclesInRange(20000, 24999, $requests))
+			<option value="{{getRequest('price', '20000', '24999')}}" @if(isSelected(null, 'max', '24999')) selected @endif>
+				$20,000 - $24,999 {{($showCounts) ? '('.Helpers::vehiclesInRange(20000, 24999, $requests).')' : ''}}
+			</option>
+		@endif
+		@if($min < 29999 && $max >= 25000 && Helpers::vehiclesInRange(25000, 29999, $requests))
+			<option value="{{getRequest('price', '25000', '29999')}}" @if(isSelected(null, 'max', '29999')) selected @endif>
+				$25,000 - $29,999 {{($showCounts) ? '('.Helpers::vehiclesInRange(25000, 29999, $requests).')' : ''}}
 			</option>
 		@endif
 		@if($max >= 30000 && Helpers::vehiclesInRange(30000, null, $requests))
