@@ -8,7 +8,20 @@ $showCounts = (array_key_exists('counts', $params)) ? $params['counts'] : false;
 $min = Helpers::get_min_price(\Request::get('make'), \Request::get('model'), $type);
 $max = Helpers::get_max_price(\Request::get('make'), \Request::get('model'), $type);
 $trims = \Request::has('model') ? Helpers::get_trims(\Request::get('model'), $type) : array();
+
 $transmissions = \Request::has('model') ? Helpers::get_transmissions(\Request::get('model'), \Request::get('trim'), $type) : array();
+
+//Load options (fallback to defaults if no options saved)
+$config = json_decode(\DealerLive\Config\Helper::check('inv_filter_toggles'));
+if(!$config)
+{
+	$config->make = true;
+	$config->model = true;
+	$config->price = true;
+	$config->trim = true;
+	$config->trans = true;
+	$config->year = false;
+}
 
 //Collect all the values into an array for use with
 //some Helper methods, specifically the price range method
@@ -22,6 +35,9 @@ $requests = array(
 	'trim' => \Request::get('trim'),
 	'trans' => \Request::get('trans')
 );
+
+$years = Helpers::get_years($requests);
+rsort($years);
 
 //Method generates a URL that maintains appropriate filters
 function getRequest($section, $value, $value2 = null)
@@ -62,6 +78,11 @@ function getRequest($section, $value, $value2 = null)
 		if($value)
 			$segment[] = "trans=".urlencode($value);
 	}
+	elseif($section == 'year')
+	{
+		if($value)
+			$segment[] = "year=".urlencode($value);
+	}
 
 	$request = implode('&', $segment);
 	return ($request) ? '?'.$request : '';
@@ -85,6 +106,9 @@ function isSelected($object, $description = null, $value = null)
 	if($description == "trans" && \Request::get('trans') == $value)
 		return true;
 
+	if($description == "year" && \Request::get('year') == $value)
+		return true;
+
 	if(property_exists($object, 'model'))
 		return ($object->model == \Request::get('model'));
 
@@ -102,7 +126,7 @@ function isSelected($object, $description = null, $value = null)
 		<h3>{{ucfirst($type)}} Vehicles</h3>
 	</div>
 
-	<div class="listing-select">
+	<div class="listing-select" @if(!$config->make) style="display: none" @endif>
 		<h5>Make</h5>
 		<select>
 			<option value="">All Vehicles</option>
@@ -115,7 +139,7 @@ function isSelected($object, $description = null, $value = null)
 		</select> 
 	</div>
 
-	<div class="listing-select">
+	<div class="listing-select" @if(!$config->model) style="display: none" @endif>
 		<h5>Model</h5>
 		<select>
 			<option value="{{getRequest('model', '')}}">All Models</option>
@@ -130,7 +154,7 @@ function isSelected($object, $description = null, $value = null)
 
 	@if(\Request::has('model') && count($trims))
 
-	<div class="listing-select">
+	<div class="listing-select" @if(!$config->trim) style="display: none" @endif >
 		<h5>Trim</h5>
 		<select>
 			<option value="{{getRequest('trim', '')}}">All Trims</option>
@@ -146,7 +170,7 @@ function isSelected($object, $description = null, $value = null)
 	@endif
 
 	@if(\Request::has('model') && count($transmissions))
-	<div class="listing-select">
+	<div class="listing-select" @if(!$config->trans) style="display: none" @endif>
 		<h5>Transmission</h5>
 		<select>
 			<option value="{{getRequest('trans', '')}}">All Transmissions</option>
@@ -160,7 +184,7 @@ function isSelected($object, $description = null, $value = null)
 	</div>
 	@endif
 
-	<div class="listing-select">
+	<div class="listing-select" @if(!$config->price) style="display: none" @endif>
 		<h5>Price</h5>
 		<select>
 		<option value="{{getRequest('price', '')}}">All Prices</option>
@@ -186,6 +210,21 @@ function isSelected($object, $description = null, $value = null)
 		@endif
 		</select> 
 	</div>
+
+	
+	<div class="listing-select" @if(!$config->year) style="display: none" @endif>
+		<h5>Year</h5>
+		<select>
+			<option value="{{getRequest('year', '')}}">All Years</option>
+			@foreach($years as $y)
+			<option value="{{getRequest('year', $y->year)}}" @if(isSelected(null, 'year', $y->year)) selected @endif>
+				{{$y->year}}
+				{{($showCounts) ? '('.Helpers::get_year_count($y->year, $requests).')' : ''}}
+			</option>
+			@endforeach
+		</select>
+	</div>
+	
 </div>
 
 <script type="text/javascript">
