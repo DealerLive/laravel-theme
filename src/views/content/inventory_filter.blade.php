@@ -12,7 +12,15 @@ $trims = \Request::has('model') ? Helpers::get_trims(\Request::get('model'), $ty
 $transmissions = \Request::has('model') ? Helpers::get_transmissions(\Request::get('model'), \Request::get('trim'), $type) : array();
 
 //Load options (fallback to defaults if no options saved)
-$config = json_decode(\DealerLive\Config\Helper::check('inv_filter_toggles'));
+$configContainer = json_decode(\DealerLive\Config\Helper::check('inv_filter_toggles'));
+$config = null;
+
+//Find the config that matches the current type
+$searchType = ($type == 'all') ? 'new' : $type;
+foreach($configContainer as $c)
+	if($c->type == $searchType)
+		$config = $c;
+	
 if(!$config)
 {
 	$config->make = true;
@@ -37,6 +45,7 @@ $requests = array(
 );
 
 $years = Helpers::get_years($requests);
+
 rsort($years);
 
 //Method generates a URL that maintains appropriate filters
