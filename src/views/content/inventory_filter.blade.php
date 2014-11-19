@@ -132,7 +132,7 @@ function isSelected($object, $description = null, $value = null)
 <div class="listing-navigation">
 	<div class="listing-navigation-title">
 		<h5>{{ \DealerLive\Config\Helper::check('store_name') }}</h5>
-		<h3>{{ucfirst($type)}} Vehicles</h3>
+		<h3>{{trans('inventory::vehicles.'.$type.'_vehicles')}}</h3>
 	</div>
 
 	<div class="listing-select" @if(!$config->make) style="display: none" @endif>
