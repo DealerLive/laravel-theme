@@ -143,9 +143,9 @@ function isSelected($object, $description = null, $value = null)
 	</div>
 
 	<div class="listing-select" @if(!$config->make) style="display: none" @endif>
-		<h5>Make</h5>
+		<h5>{{trans('inventory::vehicles.make')}}</h5>
 		<select>
-			<option value="">All Vehicles</option>
+			<option value="">{{trans('general.choose')}}</option>
 			@foreach(Helpers::get_makes($type) as $make)
 			<option value="?make={{$make->make}}" @if(isSelected($make)) selected @endif>
 				{{ $make->make }}
@@ -156,9 +156,9 @@ function isSelected($object, $description = null, $value = null)
 	</div>
 
 	<div class="listing-select" @if(!$config->model) style="display: none" @endif>
-		<h5>Model</h5>
+		<h5>{{trans('inventory::vehicles.model')}}</h5>
 		<select>
-			<option value="{{getRequest('model', '')}}">All Models</option>
+			<option value="{{getRequest('model', '')}}">{{trans('general.choose')}}</option>
 			@foreach(Helpers::get_models($type, \Request::get('make')) as $model)
 			<option value="{{getRequest('model', $model->model)}}" @if(isSelected($model)) selected @endif>
 				{{ $model->model }}
@@ -171,9 +171,9 @@ function isSelected($object, $description = null, $value = null)
 	@if(\Request::has('model') && count($trims))
 
 	<div class="listing-select" @if(!$config->trim) style="display: none" @endif >
-		<h5>Trim</h5>
+		<h5>{{trans('inventory::vehicles.trim')}}</h5>
 		<select>
-			<option value="{{getRequest('trim', '')}}">All Trims</option>
+			<option value="{{getRequest('trim', '')}}">{{trans('general.choose')}}</option>
 			@foreach($trims as $t)
 			<option value="{{getRequest('trim', $t->trim)}}" @if(isSelected(null, 'trim', $t->trim)) selected @endif>
 				{{ $t->trim }}
@@ -187,9 +187,9 @@ function isSelected($object, $description = null, $value = null)
 
 	@if(\Request::has('model') && count($transmissions))
 	<div class="listing-select" @if(!$config->trans) style="display: none" @endif>
-		<h5>Transmission</h5>
+		<h5>{{trans('inventory::vehicles.transmission')}}</h5>
 		<select>
-			<option value="{{getRequest('trans', '')}}">All Transmissions</option>
+			<option value="{{getRequest('trans', '')}}">{{trans('general.choose')}}</option>
 			@foreach($transmissions as $trans)
 			<option value="{{getRequest('trans', $trans->transmission)}}" @if(isSelected(null, 'trans', $trans->transmission)) selected @endif>
 				{{ $trans->transmission }}
@@ -201,9 +201,9 @@ function isSelected($object, $description = null, $value = null)
 	@endif
 
 	<div class="listing-select" @if(!$config->price) style="display: none" @endif>
-		<h5>Price</h5>
+		<h5>{{trans('inventory::vehicles.price')}}</h5>
 		<select>
-		<option value="{{getRequest('price', '')}}">All Prices</option>
+		<option value="{{getRequest('price', '')}}">{{trans('general.choose')}}</option>
 		@if($min < 9999 && Helpers::vehiclesInRange(null, 9999, $requests))
 			<option value="{{getRequest('price', null, '9999')}}" @if(isSelected(null, 'max', '9999')) selected @endif>
 				$0 - $9,999 {{($showCounts) ? '('.Helpers::vehiclesInRange(null, 9999, $requests).')' : ''}}
@@ -239,7 +239,7 @@ function isSelected($object, $description = null, $value = null)
 
 	
 	<div class="listing-select" @if(!$config->year) style="display: none" @endif>
-		<h5>Year</h5>
+		<h5>{{trans('inventory::vehicles.year')}}</h5>
 		<select>
 			<option value="{{getRequest('year', '')}}">All Years</option>
 			@foreach($years as $y)
