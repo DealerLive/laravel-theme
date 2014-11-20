@@ -125,7 +125,6 @@ class Theme
 
     public static function content($blade, $params = array())
     {
-        return '';
         if(\View::exists('Theme::content.'.$blade))
             return \View::make('Theme::content.'.$blade, compact('params'));
     }
