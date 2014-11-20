@@ -12,7 +12,13 @@ $trims = \Request::has('model') ? Helpers::get_trims(\Request::get('model'), $ty
 $transmissions = \Request::has('model') ? Helpers::get_transmissions(\Request::get('model'), \Request::get('trim'), $type) : array();
 
 //Load options (fallback to defaults if no options saved)
-$configContainer = json_decode(\DealerLive\Config\Helper::check('inv_filter_toggles'));
+$configValue = \DealerLive\Config\Helper::check('inv_filter_toggles');
+
+if($configValue !== false)
+	$configContainer = json_decode($configValue);
+else
+	$configContainer = array();
+
 $config = null;
 
 //Find the config that matches the current type
@@ -20,9 +26,10 @@ $searchType = ($type == 'all') ? 'new' : $type;
 foreach($configContainer as $c)
 	if($c->type == $searchType)
 		$config = $c;
-	
+
 if(!$config)
 {
+	$config = new \stdClass();
 	$config->make = true;
 	$config->model = true;
 	$config->price = true;
