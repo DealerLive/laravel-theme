@@ -8,8 +8,9 @@ $showCounts = (array_key_exists('counts', $params)) ? $params['counts'] : false;
 $make_count = Helpers::get_all_makes_count($type);
 if(Request::get('make'))
 	$model_count = Helpers::get_all_model_count(Request::get('make'), $type);
-else
-	$model_count = Helpers::get_all_model_count((isset($vehicles[0]->make)) ? $vehicles[0]->make : '', $type);
+
+	
+
 ?>
 
 <div id="listings-sidebar">
@@ -50,7 +51,7 @@ else
 					<p>
 						{{ $v->model }} 
 						@if($showCounts)
-						({{(isset($model_count[$v->model])) ? $model_count[$v->model] : ""}})
+						({{Helpers::get_model_count($v->model, $type)}})
 						@endif
 					</p>
 				</li>
