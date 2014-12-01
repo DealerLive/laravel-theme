@@ -142,7 +142,7 @@ function isSelected($object, $description = null, $value = null)
 		<h3>{{trans('inventory::vehicles.'.$type.'_vehicles')}}</h3>
 	</div>
 
-	<div class="listing-select" @if(!$config->make) style="display: none" @endif>
+	<div class="listing-select" @if(!$config->make || count(Helpers::get_makes($type) <= 1)) style="display: none" @endif>
 		<h5>{{trans('inventory::vehicles.make')}}</h5>
 		<select>
 			<option value="">{{trans('general.choose')}}</option>
