@@ -8,8 +8,9 @@ $showCounts = (array_key_exists('counts', $params)) ? $params['counts'] : false;
 $min = Helpers::get_min_price(\Request::get('make'), \Request::get('model'), $type);
 $max = Helpers::get_max_price(\Request::get('make'), \Request::get('model'), $type);
 $trims = \Request::has('model') ? Helpers::get_trims(\Request::get('model'), $type) : array();
-
+$class_count = Helpers::getClassificationCounts($type);
 $transmissions = \Request::has('model') ? Helpers::get_transmissions(\Request::get('model'), \Request::get('trim'), $type) : array();
+
 
 //Load options (fallback to defaults if no options saved)
 $configValue = \DealerLive\Config\Helper::check('inv_filter_toggles');
@@ -59,6 +60,10 @@ rsort($years);
 function getRequest($section, $value, $value2 = null)
 {	
 	$segment = array();
+
+	if(\Request::has('classification'))
+		$segment[] = "classification=".urlencode(\Request::get('classification'));
+
 	if(\Request::has('make'))
 		$segment[] = "make=".urlencode(\Request::get('make'));
 
@@ -133,7 +138,6 @@ function isSelected($object, $description = null, $value = null)
 
 	return false;
 }
-
 ?>
 
 <div class="listing-navigation">
@@ -142,14 +146,29 @@ function isSelected($object, $description = null, $value = null)
 		<h3>{{trans('inventory::vehicles.'.$type.'_vehicles')}}</h3>
 	</div>
 
-	<div class="listing-select" @if(!$config->make || count(Helpers::get_makes($type) <= 1)) style="display: none" @endif>
+	@if(property_exists($config, 'classification') && $config->classification)
+	<div class="listing-select" >
+		<h5>Classification</h5>
+		<select>
+			<option value="">Select</option>
+			@foreach(Helpers::getClassifications($type) as $class)
+			<option value="?classification={{$class->classification}}" @if($class->classification == \Request::get('classification')) selected @endif>
+				{{ucwords($class->classification)}}
+				{{($showCounts ? $class_count[$class->classification] : '')}}
+			</option>
+			@endforeach
+		</select>
+	</div>
+	@endif
+
+	<div class="listing-select" @if(!$config->make || count(Helpers::get_makes($type, \Request::get('classification')) <= 1)) style="display: none" @endif>
 		<h5>{{trans('inventory::vehicles.make')}}</h5>
 		<select>
 			<option value="">{{trans('general.choose')}}</option>
-			@foreach(Helpers::get_makes($type) as $make)
-			<option value="?make={{$make->make}}" @if(isSelected($make)) selected @endif>
+			@foreach(Helpers::get_makes($type, \Request::get('classification')) as $make)
+			<option value="?make={{$make->make}}&classification={{\Request::get('classification')}}" @if(isSelected($make)) selected @endif>
 				{{ $make->make }}
-				{{($showCounts) ? '('.Helpers::get_make_count($make->make, $type).')' : ''}}
+				{{($showCounts) ? '('.Helpers::get_make_count($make->make, $type, \Request::get('classification')).')' : ''}}
 			</option>
 			@endforeach
 		</select> 
@@ -159,10 +178,10 @@ function isSelected($object, $description = null, $value = null)
 		<h5>{{trans('inventory::vehicles.model')}}</h5>
 		<select>
 			<option value="{{getRequest('model', '')}}">{{trans('general.choose')}}</option>
-			@foreach(Helpers::get_models($type, \Request::get('make')) as $model)
+			@foreach(Helpers::get_models($type, \Request::get('make'), \Request::get('classification')) as $model)
 			<option value="{{getRequest('model', $model->model)}}" @if(isSelected($model)) selected @endif>
 				{{ $model->model }}
-				{{($showCounts) ? '('.Helpers::get_model_count($model->model, $type).')' : ''}}
+				{{($showCounts) ? '('.Helpers::get_model_count($model->model, $type, \Request::get('make'), \Request::get('classification')).')' : ''}}
 			</option>
 			@endforeach
 		</select> 
