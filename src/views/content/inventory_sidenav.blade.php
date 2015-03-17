@@ -55,7 +55,7 @@ if(!$config)
 				<img src="{{ Theme::asset('img/icons/arrow.png') }}" />
 				<p>
 					{{ucwords($class->classification)}}
-					@if(!$showCounts)
+					@if($showCounts)
 						({{(isset($class_count[$class->classification])) ? $class_count[$class->classification] : ""}})
 					@endif
 				</p>
