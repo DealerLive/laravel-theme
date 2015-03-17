@@ -25,7 +25,7 @@ $config = null;
 //Find the config that matches the current type
 $searchType = ($type == 'all') ? 'new' : $type;
 foreach($configContainer as $c)
-	if($c->type == $searchType)
+	if($c->type == str_replace(' ', '_', $searchType))
 		$config = $c;
 
 
