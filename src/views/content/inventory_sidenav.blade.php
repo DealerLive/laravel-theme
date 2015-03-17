@@ -45,7 +45,7 @@ if(!$config)
 
 <div id="listings-sidebar">
 
-	@if(property_exists($config, 'classification') && $config->classification)
+	@if($type == 'All' || (property_exists($config, 'classification') && $config->classification))
 	<ul class="listing-navigation">
 		<h4>Classification</h4>
 		@if(!\Request::get('classification'))
