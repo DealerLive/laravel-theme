@@ -39,6 +39,15 @@ class LaravelThemeServiceProvider extends ServiceProvider {
                 );
         });
 
+       \Event::listen('cms.edit-mode', function($data)
+        {   
+            if(\Auth::check() && !$data->isHidden())
+            {
+                \Theme::addEditButton('<a class="btn btn-default btn-sm" href="'.$data->getURL().'" style="position: fixed; bottom: '.(\Theme::getEdittNavigationCount()+20).'px; left: 20px; opacity: 0.7">'.$data->getName().'</a>');
+                \Theme::increaseEditNavigationCount(35);
+            }
+        });
+
        \View::addNamespace('Theme', __DIR__.'/../../views/');
     }
 
