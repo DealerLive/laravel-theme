@@ -7,9 +7,33 @@ use \DealerLive\Config\Helper;
 class Theme
 {
 
+    protected $editModeButtons;
+    protected $editNavigationCount;
+
+    public function increaseEditNavigationCount($amount)
+    {
+        $this->editNavigationCount += $amount;
+    }
+
+    public function getEdittNavigationCount()
+    {
+        return $this->editNavigationCount;
+    }
+
     private static function layoutDir()
     {
         return __DIR__.'/../../views/';
+    }
+
+    public function addEditButton($string)
+    {
+        $this->editModeButtons .= $string;
+    }
+
+    public function getEditButtons()
+    {
+        return $this->editModeButtons;
+
     }
 
     private $theme;
@@ -24,6 +48,9 @@ class Theme
     public function __construct($finder)
     {
         $this->finder = $finder;
+        $this->editNavigationCount = 0;
+        $this->editModeButtons = '';
+
     }
 
     /**
@@ -98,6 +125,9 @@ class Theme
 
     public static function navigation()
     {
+        
+        echo \Theme::getEditButtons();
+
         if(file_exists(public_path().'/themes/yields/'.\App::getLocale().'_nav.blade.php'))
             include (public_path().'/themes/yields/'.\App::getLocale().'_nav.blade.php');
         elseif(file_exists(public_path().'/themes/yields/nav.blade.php'))
