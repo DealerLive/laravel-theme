@@ -52,7 +52,6 @@ if(!$config)
 		@foreach(Helpers::getClassifications($type) as $class)
 		<a href="{{\URL::route('inventory', $type)}}?page=1&classification={{$class->classification}}">
 			<li>
-				<img src="{{ Theme::asset('img/icons/arrow.png') }}" />
 				<p>
 					{{ucwords($class->classification)}}
 					@if($showCounts)
@@ -65,7 +64,6 @@ if(!$config)
 		@else
 			<a href="{{ URL::route('inventory', $type) }}?make={{\Request::get('make')}}&model={{\Request::get('model')}}">
 				<li>
-					<img src="{{ Theme::asset('img/icons/arrow.png') }}">
 					<p>{{ ucwords(\Request::get('classification')) }}
 					@if($showCounts)
 						({{(isset($class_count[\Request::get('classification')])) ? $class_count[\Request::get('classification')] : ""}})
@@ -84,7 +82,6 @@ if(!$config)
 		@foreach(Helpers::get_makes($type, \Request::get('classification')) as $v)
 		<a href="{{ URL::route('inventory', $type)}}?page=1&make={{$v->make}}&classification={{\Request::get('classification')}}">
 			<li>
-				<img src="{{ Theme::asset('img/icons/arrow.png') }}" />
 				<p>
 					{{ $v->make }} 
 					@if($showCounts)
@@ -97,7 +94,6 @@ if(!$config)
 		@else
 			<a href="{{ URL::route('inventory', $type) }}?classification={{\Request::get('classification')}}">
 				<li>
-					<img src="{{ Theme::asset('img/icons/arrow.png') }}">
 					<p>{{ Request::get('make') }}</p> 
 					<div class="remove-filter">X</div>
 				</li>
@@ -111,7 +107,6 @@ if(!$config)
 		@foreach(Helpers::get_models($type, Request::get('make'), \Request::get('classification')) as $v)
 			<a href="{{ URL::route('inventory', $type)}}?page=1&make={{Request::get('make').'&model='.$v->model }}&classification={{\Request::get('classification')}}">
 				<li>
-					<img src="{{ Theme::asset('img/icons/arrow.png') }}" />
 					<p>
 						{{ $v->model }} 
 						@if($showCounts)
