@@ -87,7 +87,10 @@ class Theme
      */
     public function asset($path = '')
     {
-        return asset($this->options['public_dirname'] . '/' . $this->name() . '/' . trim($path, '/'));
+        $file = $this->options['public_dirname'].'/'.$this->name().'/'.trim($path, '/');
+        if(file_exists($file))
+            return asset($this->options['public_dirname'] . '/' . $this->name() . '/' . trim($path, '/'));
+        return asset($this->options['public_dirname'].'/.shared/'.trim($path, '/'));
     }
 
     /**
@@ -134,6 +137,14 @@ class Theme
             include (public_path().'/themes/yields/nav.blade.php');
     }
 
+    public static function mobileNavigation()
+    {
+        if(file_exists(public_path().'/themes/yields/'.\App::getLocale().'_mobile_nav.blade.php'))
+            include (public_path().'/themes/yields/'.\App::getLocale().'_mobile_nav.blade.php');
+        elseif(file_exists(public_path().'/themes/yields/mobile_nav.blade.php'))
+            include (public_path().'/themes/yields/mobile_nav.blade.php');
+    }
+
     public static function social($specific = null)
     {
         $result = null;
@@ -156,7 +167,18 @@ class Theme
     public static function content($blade, $params = array())
     {
         if(\View::exists('Theme::content.'.$blade))
-            return \View::make('Theme::content.'.$blade, compact('params'));
+        {
+            try
+            {
+                $markup = \View::make('Theme::content.'.$blade, compact('params'))->render();
+            }
+            catch(\Exception $ex)
+            {
+                return null;
+            }
+            
+            return $markup;
+        }
     }
 
     public function getLayouts()
