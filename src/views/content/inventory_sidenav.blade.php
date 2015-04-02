@@ -64,12 +64,13 @@ if(!$config)
 		@else
 			<a href="{{ URL::route('inventory', $type) }}?make={{\Request::get('make')}}&model={{\Request::get('model')}}">
 				<li>
+					<div class="remove-filter">X</div>
 					<p>{{ ucwords(\Request::get('classification')) }}
 					@if($showCounts)
 						({{(isset($class_count[\Request::get('classification')])) ? $class_count[\Request::get('classification')] : ""}})
 					@endif
 					</p>
-					<div class="remove-filter">X</div>
+					
 				</li>
 			</a>
 		@endif
@@ -94,8 +95,8 @@ if(!$config)
 		@else
 			<a href="{{ URL::route('inventory', $type) }}?classification={{\Request::get('classification')}}">
 				<li>
-					<p>{{ Request::get('make') }}</p> 
 					<div class="remove-filter">X</div>
+					<p>{{ Request::get('make') }}</p> 
 				</li>
 			</a>
 		@endif
