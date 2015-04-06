@@ -181,6 +181,26 @@ class Theme
         }
     }
 
+    public function isResponsive()
+    {
+        if($this->check('responsive'))
+            return true;
+        return false;
+    }
+
+    public function check($property)
+    {
+        if(!file_exists($this->options['public_dirname'].'/'.$this->name().'/theme.json'))
+            return null;
+
+        $json = json_decode(file_get_contents($this->options['public_dirname'].'/'.$this->name().'/theme.json'));
+       
+        if(property_exists($json, $property))
+            return $json->$property;
+
+        return null;
+    }
+
     public function getLayouts()
     {
         $path = Theme::viewPath().'/layouts';
