@@ -39,7 +39,6 @@ class Theme
     private $theme;
 
     protected $finder;
-
     protected $options = array(
         'public_dirname' => 'themes',
         'views_path' => null,
@@ -183,9 +182,11 @@ class Theme
 
     public function isResponsive()
     {
-        if($this->check('responsive'))
+        if(Helper::check('theme_responsive') == 'true')
             return true;
-        return false;
+        else
+            return false;
+        
     }
 
     public function check($property)
