@@ -43,7 +43,11 @@ class LaravelThemeServiceProvider extends ServiceProvider {
         {   
             if(\Auth::check() && !$data->isHidden())
             {
-                \Theme::addEditButton('<a '.$data->getAttributeString().' class="btn btn-default btn-sm" href="'.$data->getURL().'" style="position: fixed; bottom: '.(\Theme::getEdittNavigationCount()+20).'px; left: 20px; opacity: 0.7">'.$data->getName().'</a>');
+                $button = '<a '.$data->getAttributeString().' class="btn btn-default btn-sm" ';
+                if($data->getURL() !== false)
+                    $button .= 'href="'.$data->getURL().'" ';
+                $button .= 'style="position: fixed; bottom: '.(\Theme::getEdittNavigationCount()+20).'px; left: 20px; opacity: 0.7">'.$data->getName().'</a>';
+                \Theme::addEditButton($button);
                 if(!is_null($data->getContent()))
                     \Theme::addEditButton($data->getContent());
                 \Theme::increaseEditNavigationCount(35);
