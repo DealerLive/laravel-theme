@@ -150,7 +150,7 @@ function isSelected($object, $description = null, $value = null)
 	<div class="listing-select" >
 		<h5>Classification</h5>
 		<select>
-			<option value="">Select</option>
+			<option value="">{{trans('general.choose')}} {{trans('inventory::vehicles.classification')}}</option>
 			@foreach(Helpers::getClassifications($type) as $class)
 			<option value="?classification={{$class->classification}}" @if($class->classification == \Request::get('classification')) selected @endif>
 				{{ucwords($class->classification)}}
@@ -164,7 +164,7 @@ function isSelected($object, $description = null, $value = null)
 	<div class="listing-select" @if(!$config->make || count(Helpers::get_makes($type, \Request::get('classification')) <= 1)) style="display: none" @endif>
 		<h5>{{trans('inventory::vehicles.make')}}</h5>
 		<select>
-			<option value="">{{trans('general.choose')}}</option>
+			<option value="">{{trans('general.choose')}} {{trans('inventory::vehicles.make')}}</option>
 			@foreach(Helpers::get_makes($type, \Request::get('classification')) as $make)
 			<option value="?make={{$make->make}}&classification={{\Request::get('classification')}}" @if(isSelected($make)) selected @endif>
 				{{ $make->make }}
@@ -177,7 +177,7 @@ function isSelected($object, $description = null, $value = null)
 	<div class="listing-select" @if(!$config->model) style="display: none" @endif>
 		<h5>{{trans('inventory::vehicles.model')}}</h5>
 		<select>
-			<option value="{{getRequest('model', '')}}">{{trans('general.choose')}}</option>
+			<option value="{{getRequest('model', '')}}">{{trans('general.choose')}} {{trans('inventory::vehicles.model')}}</option>
 			@foreach(Helpers::get_models($type, \Request::get('make'), \Request::get('classification')) as $model)
 			<option value="{{getRequest('model', $model->model)}}" @if(isSelected($model)) selected @endif>
 				{{ $model->model }}
@@ -192,7 +192,7 @@ function isSelected($object, $description = null, $value = null)
 	<div class="listing-select" @if(!$config->trim) style="display: none" @endif >
 		<h5>{{trans('inventory::vehicles.trim')}}</h5>
 		<select>
-			<option value="{{getRequest('trim', '')}}">{{trans('general.choose')}}</option>
+			<option value="{{getRequest('trim', '')}}">{{trans('general.choose')}} {{trans('inventory::vehicles.trim')}}</option>
 			@foreach($trims as $t)
 			<option value="{{getRequest('trim', $t->trim)}}" @if(isSelected(null, 'trim', $t->trim)) selected @endif>
 				{{ $t->trim }}
@@ -208,7 +208,7 @@ function isSelected($object, $description = null, $value = null)
 	<div class="listing-select" @if(!$config->trans) style="display: none" @endif>
 		<h5>{{trans('inventory::vehicles.transmission')}}</h5>
 		<select>
-			<option value="{{getRequest('trans', '')}}">{{trans('general.choose')}}</option>
+			<option value="{{getRequest('trans', '')}}">{{trans('general.choose')}} {{trans('inventory::vehicles.transmission')}}</option>
 			@foreach($transmissions as $trans)
 			<option value="{{getRequest('trans', $trans->transmission)}}" @if(isSelected(null, 'trans', $trans->transmission)) selected @endif>
 				{{ $trans->transmission }}
@@ -222,7 +222,7 @@ function isSelected($object, $description = null, $value = null)
 	<div class="listing-select" @if(!$config->price) style="display: none" @endif>
 		<h5>{{trans('inventory::vehicles.price')}}</h5>
 		<select>
-		<option value="{{getRequest('price', '')}}">{{trans('general.choose')}}</option>
+		<option value="{{getRequest('price', '')}}">{{trans('general.choose')}} {{trans('inventory::vehicles.price')}}</option>
 		@if($min < 9999 && Helpers::vehiclesInRange(null, 9999, $requests))
 			<option value="{{getRequest('price', null, '9999')}}" @if(isSelected(null, 'max', '9999')) selected @endif>
 				$0 - $9,999 {{($showCounts) ? '('.Helpers::vehiclesInRange(null, 9999, $requests).')' : ''}}
@@ -260,7 +260,7 @@ function isSelected($object, $description = null, $value = null)
 	<div class="listing-select" @if(!$config->year) style="display: none" @endif>
 		<h5>{{trans('inventory::vehicles.year')}}</h5>
 		<select>
-			<option value="{{getRequest('year', '')}}">All Years</option>
+			<option value="{{getRequest('year', '')}}">{{trans('general.choose')}} {{trans('inventory::vehicles.year')}}</option>
 			@foreach($years as $y)
 			<option value="{{getRequest('year', $y->year)}}" @if(isSelected(null, 'year', $y->year)) selected @endif>
 				{{$y->year}}
