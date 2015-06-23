@@ -154,7 +154,7 @@ function isSelected($object, $description = null, $value = null)
 			@foreach(Helpers::getClassifications($type) as $class)
 			<option value="?classification={{$class->classification}}" @if($class->classification == \Request::get('classification')) selected @endif>
 				{{ucwords($class->classification)}}
-				{{($showCounts ? $class_count[$class->classification] : '')}}
+				{{($showCounts ? '('.$class_count[$class->classification].')' : '')}}
 			</option>
 			@endforeach
 		</select>
