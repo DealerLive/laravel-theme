@@ -5,7 +5,7 @@ use \DealerLive\Inventory\Helpers;
 //Variables used to filter the results
 $type = (array_key_exists('type', $params)) ? $params['type'] : "all";
 $showCounts = (array_key_exists('counts', $params)) ? $params['counts'] : false;
-$make_count = Helpers::get_all_makes_count($type);
+$make_count = Helpers::get_all_makes_count($type, \Request::get('classification'));
 $class_count = Helpers::getClassificationCounts($type);
 
 if(Request::get('make'))
@@ -84,7 +84,7 @@ if(!$config)
 		<a href="{{ URL::route('inventory', $type)}}?page=1&make={{$v->make}}&classification={{\Request::get('classification')}}">
 			<li>
 				<p>
-					{{ $v->make }} 
+					{{ ucwords(strtolower($v->make)) }} 
 					@if($showCounts)
 						({{ (isset($make_count[$v->make])) ? $make_count[$v->make] : ''}})
 					@endif
@@ -109,7 +109,7 @@ if(!$config)
 			<a href="{{ URL::route('inventory', $type)}}?page=1&make={{Request::get('make').'&model='.$v->model }}&classification={{\Request::get('classification')}}">
 				<li>
 					<p>
-						{{ $v->model }} 
+						{{ ucwords(strtolower($v->model)) }} 
 						@if($showCounts)
 						({{Helpers::get_model_count($v->model, $type)}})
 						@endif
