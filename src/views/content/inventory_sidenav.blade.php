@@ -63,7 +63,7 @@ if(!$config)
 		@if(\Request::get('q') && !hasProperty($params['vehicles'], 'classification', $class->classification))
 			<?php continue; ?>
 		@endif
-		<a href="{{\URL::route('inventory', $type)}}?page=1&classification={{$class->classification}}">
+		<a href="{{\URL::route('inventory', $type)}}?page=1&classification={{$class->classification}}{{\Request::get('q') ? '&q='.\Request::get('q') : null}}">
 			<li>
 				<p>
 					{{ucwords($class->classification)}}
@@ -75,7 +75,7 @@ if(!$config)
 		</a>
 		@endforeach
 		@else
-			<a href="{{ URL::route('inventory', $type) }}?make={{\Request::get('make')}}&model={{\Request::get('model')}}">
+			<a href="{{ URL::route('inventory', $type) }}?make={{\Request::get('make')}}&model={{\Request::get('model')}}{{\Request::get('q') ? '&q='.\Request::get('q') : null}}">
 				<li>
 					<div class="remove-filter">X</div>
 					<p>{{ ucwords(\Request::get('classification')) }}
@@ -98,7 +98,7 @@ if(!$config)
 			<?php continue; ?>
 		@endif
 		
-		<a href="{{ URL::route('inventory', $type)}}?page=1&make={{$v->make}}&classification={{\Request::get('classification')}}">
+		<a href="{{ URL::route('inventory', $type)}}?page=1&make={{$v->make}}&classification={{\Request::get('classification')}}{{\Request::get('q') ? '&q='.\Request::get('q') : null}}">
 			<li>
 				<p>
 					{{ ucwords(strtolower($v->make)) }} 
@@ -126,7 +126,7 @@ if(!$config)
 		@if(\Request::get('q') && !hasProperty($params['vehicles'], 'model', $v->model))
 			<?php continue; ?>
 		@endif
-			<a href="{{ URL::route('inventory', $type)}}?page=1&make={{Request::get('make').'&model='.$v->model }}&classification={{\Request::get('classification')}}">
+			<a href="{{ URL::route('inventory', $type)}}?page=1&make={{Request::get('make').'&model='.$v->model }}&classification={{\Request::get('classification')}}{{\Request::get('q') ? '&q='.\Request::get('q') : null}}">
 				<li>
 					<p>
 						{{ ucwords(strtolower($v->model)) }} 
