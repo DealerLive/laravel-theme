@@ -60,7 +60,7 @@ if(!$config)
 		<h4>Classification</h4>
 		@if(!\Request::get('classification'))
 		@foreach(Helpers::getClassifications($type) as $class)
-		@if(!hasProperty($params['vehicles'], 'classification', $class->classification))
+		@if(\Request::get('q') && !hasProperty($params['vehicles'], 'classification', $class->classification))
 			<?php continue; ?>
 		@endif
 		<a href="{{\URL::route('inventory', $type)}}?page=1&classification={{$class->classification}}">
@@ -94,7 +94,7 @@ if(!$config)
 		<h4>Make</h4>
 		@if (!Request::get('make'))
 		@foreach(Helpers::get_makes($type, \Request::get('classification')) as $v)
-		@if(!hasProperty($params['vehicles'], 'make', $v->make))
+		@if(\Request::get('q') && !hasProperty($params['vehicles'], 'make', $v->make))
 			<?php continue; ?>
 		@endif
 		
@@ -123,7 +123,7 @@ if(!$config)
 	<ul class="listing-navigation">
 		<h4>Model</h4>
 		@foreach(Helpers::get_models($type, Request::get('make'), \Request::get('classification')) as $v)
-		@if(!hasProperty($params['vehicles'], 'model', $v->model))
+		@if(\Request::get('q') && !hasProperty($params['vehicles'], 'model', $v->model))
 			<?php continue; ?>
 		@endif
 			<a href="{{ URL::route('inventory', $type)}}?page=1&make={{Request::get('make').'&model='.$v->model }}&classification={{\Request::get('classification')}}">
