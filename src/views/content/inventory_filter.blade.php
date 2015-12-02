@@ -2,6 +2,7 @@
 
 use \DealerLive\Inventory\Helpers;
 
+try{
 //Variables used to filter the results
 $type = (array_key_exists('type', $params)) ? $params['type'] : "all";
 $showCounts = (array_key_exists('counts', $params)) ? $params['counts'] : false;
@@ -55,7 +56,11 @@ $requests = array(
 $years = Helpers::get_years($requests);
 
 rsort($years);
-
+}
+catch(\Exception $ex)
+{
+	dd($ex->getMessage());
+}
 //Method generates a URL that maintains appropriate filters
 function getRequest($section, $value, $value2 = null)
 {	
@@ -138,6 +143,8 @@ function isSelected($object, $description = null, $value = null)
 
 	return false;
 }
+
+try{
 ?>
 
 <div class="listing-navigation">
@@ -152,6 +159,7 @@ function isSelected($object, $description = null, $value = null)
 		<select>
 			<option value="">{{trans('general.choose')}} {{trans('inventory::vehicles.classification')}}</option>
 			@foreach(Helpers::getClassifications($type) as $class)
+			@if(!isset($class_count[$class->classification])) <?php continue; ?> @endif
 			<option value="?classification={{$class->classification}}" @if($class->classification == \Request::get('classification')) selected @endif>
 				{{ucwords($class->classification)}}
 				{{($showCounts ? '('.$class_count[$class->classification].')' : '')}}
@@ -179,6 +187,9 @@ function isSelected($object, $description = null, $value = null)
 		<select>
 			<option value="{{getRequest('model', '')}}">{{trans('general.choose')}} {{trans('inventory::vehicles.model')}}</option>
 			@foreach(Helpers::get_models($type, \Request::get('make'), \Request::get('classification')) as $model)
+			@if(!Helpers::get_model_count($model->model, $type, \Request::get('make'), \Request::get('classification')))
+			<?php continue; ?>
+			@endif
 			<option value="{{getRequest('model', $model->model)}}" @if(isSelected($model)) selected @endif>
 				{{ $model->model }}
 				{{($showCounts) ? '('.Helpers::get_model_count($model->model, $type, \Request::get('make'), \Request::get('classification')).')' : ''}}
@@ -271,7 +282,13 @@ function isSelected($object, $description = null, $value = null)
 	</div>
 	
 </div>
-
+<?php
+}
+catch(\Exception $ex)
+{
+	dd($ex->getMessage());
+}
+?>
 <script type="text/javascript">
 	$(function(){
 	  $('.listing-select select').change(function(){ 

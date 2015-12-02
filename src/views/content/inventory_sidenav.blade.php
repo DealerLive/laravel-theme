@@ -94,23 +94,23 @@ if(!$config)
 	<ul class="listing-navigation">
 		<h4>Make</h4>
 		@if (!Request::get('make'))
-		@foreach(Helpers::get_makes($type, \Request::get('classification')) as $v)
-		@if(\Request::get('q') && !hasProperty($params['vehicles'], 'make', $v->make))
-			<?php continue; ?>
-		@endif
-		
-		
-		<li>
-			<a href="{{ URL::route('inventory', $type)}}?page=1&make={{$v->make}}&classification={{\Request::get('classification')}}{{\Request::get('q') ? '&q='.\Request::get('q') : null}}">
-			
-				{{ ucwords(strtolower($v->make)) }} 
-				@if($showCounts)
-					({{ (isset($make_count[$v->make])) ? $make_count[$v->make] : ''}})
+			@foreach(Helpers::get_makes($type, \Request::get('classification')) as $v)
+				@if(\Request::get('q') && !hasProperty($params['vehicles'], 'make', $v->make))
+					<?php continue; ?>
 				@endif
-			</a>
-		</li>
-		
-		@endforeach
+				
+				
+				<li>
+					<a href="{{ URL::route('inventory', $type)}}?page=1&make={{$v->make}}&classification={{\Request::get('classification')}}{{\Request::get('q') ? '&q='.\Request::get('q') : null}}">
+					
+						{{ ucwords(strtolower($v->make)) }} 
+						@if($showCounts)
+							({{ (isset($make_count[$v->make])) ? $make_count[$v->make] : ''}})
+						@endif
+					</a>
+				</li>
+			
+			@endforeach
 		@else
 			<a href="{{ URL::route('inventory', $type) }}?classification={{\Request::get('classification')}}">
 				<li>
