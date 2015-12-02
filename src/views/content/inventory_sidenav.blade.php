@@ -17,10 +17,6 @@ $type = (array_key_exists('type', $params)) ? $params['type'] : "all";
 $showCounts = (array_key_exists('counts', $params)) ? $params['counts'] : false;
 $make_count = Helpers::get_all_makes_count($type, \Request::get('classification'));
 $class_count = Helpers::getClassificationCounts($type);
-
-if(Request::get('make'))
-	$model_count = Helpers::get_all_model_count(Request::get('make'), $type);
-
 	
 //Load options (fallback to defaults if no options saved)
 $configValue = \DealerLive\Config\Helper::check('inv_filter_toggles');
@@ -63,16 +59,21 @@ if(!$config)
 		@if(\Request::get('q') && !hasProperty($params['vehicles'], 'classification', $class->classification))
 			<?php continue; ?>
 		@endif
-		<a href="{{\URL::route('inventory', $type)}}?page=1&classification={{$class->classification}}{{\Request::get('q') ? '&q='.\Request::get('q') : null}}">
-			<li>
-				<p>
-					{{ucwords($class->classification)}}
-					@if($showCounts)
-						({{(isset($class_count[$class->classification])) ? $class_count[$class->classification] : ""}})
-					@endif
-				</p>
-			</li>
-		</a>
+
+		@if(isset($class_count[$class->classification]) && $class_count[$class->classification])
+		
+		<li>
+			<a href="{{\URL::route('inventory', $type)}}?page=1&classification={{$class->classification}}{{\Request::get('q') ? '&q='.\Request::get('q') : null}}">
+				
+				{{ucwords($class->classification)}}
+				@if($showCounts)
+					({{(isset($class_count[$class->classification])) ? $class_count[$class->classification] : "0"}})
+				@endif
+				
+			</a>
+		</li>
+		
+		@endif
 		@endforeach
 		@else
 			<a href="{{ URL::route('inventory', $type) }}?make={{\Request::get('make')}}&model={{\Request::get('model')}}{{\Request::get('q') ? '&q='.\Request::get('q') : null}}">
@@ -98,16 +99,17 @@ if(!$config)
 			<?php continue; ?>
 		@endif
 		
-		<a href="{{ URL::route('inventory', $type)}}?page=1&make={{$v->make}}&classification={{\Request::get('classification')}}{{\Request::get('q') ? '&q='.\Request::get('q') : null}}">
-			<li>
-				<p>
-					{{ ucwords(strtolower($v->make)) }} 
-					@if($showCounts)
-						({{ (isset($make_count[$v->make])) ? $make_count[$v->make] : ''}})
-					@endif
-				</p>
-			</li>
-		</a>
+		
+		<li>
+			<a href="{{ URL::route('inventory', $type)}}?page=1&make={{$v->make}}&classification={{\Request::get('classification')}}{{\Request::get('q') ? '&q='.\Request::get('q') : null}}">
+			
+				{{ ucwords(strtolower($v->make)) }} 
+				@if($showCounts)
+					({{ (isset($make_count[$v->make])) ? $make_count[$v->make] : ''}})
+				@endif
+			</a>
+		</li>
+		
 		@endforeach
 		@else
 			<a href="{{ URL::route('inventory', $type) }}?classification={{\Request::get('classification')}}">
@@ -126,16 +128,16 @@ if(!$config)
 		@if(\Request::get('q') && !hasProperty($params['vehicles'], 'model', $v->model))
 			<?php continue; ?>
 		@endif
+		@if(Helpers::get_model_count($v->model, $type))
+		<li>
 			<a href="{{ URL::route('inventory', $type)}}?page=1&make={{Request::get('make').'&model='.$v->model }}&classification={{\Request::get('classification')}}{{\Request::get('q') ? '&q='.\Request::get('q') : null}}">
-				<li>
-					<p>
-						{{ ucwords(strtolower($v->model)) }} 
-						@if($showCounts)
-						({{Helpers::get_model_count($v->model, $type)}})
-						@endif
-					</p>
-				</li>
+				{{ ucwords(strtolower($v->model)) }} 
+				@if($showCounts)
+					({{Helpers::get_model_count($v->model, $type)}})
+				@endif
 			</a>
+		</li>
+		@endif
 		@endforeach
 	</ul>
 	@endif
