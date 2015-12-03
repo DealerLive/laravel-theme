@@ -98,7 +98,10 @@ if(!$config)
 				@if(\Request::get('q') && !hasProperty($params['vehicles'], 'make', $v->make))
 					<?php continue; ?>
 				@endif
-				
+				@if(!isset($make_count[$v->make]))
+					<?php continue; ?>
+				@endif
+
 				<li>
 					<a href="{{ URL::route('inventory', $type)}}?page=1&make={{$v->make}}&classification={{\Request::get('classification')}}{{\Request::get('q') ? '&q='.\Request::get('q') : null}}">
 					
