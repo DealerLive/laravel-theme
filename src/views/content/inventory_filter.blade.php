@@ -297,3 +297,12 @@ catch(\Exception $ex)
 	echo '</div>';
 }
 ?>
+
+<script type="text/javascript">
+$(function(){	
+	$('.listing-select select').change(function(){ 
+	  	var url = '{{\Request::url()}}';
+	    window.location = ($(this).val() !== '') ? url+$(this).val() : url;
+	 });
+});
+</script>
