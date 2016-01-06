@@ -61,7 +61,10 @@ rsort($years);
 }
 catch(\Exception $ex)
 {
-	dd($ex->getMessage());
+	echo '<div style="display: none">';
+	echo $ex->getMessage();
+	echo $ex->__toString();
+	echo '</div>';
 }
 //Method generates a URL that maintains appropriate filters
 function getRequest($section, $value, $value2 = null)
@@ -284,14 +287,15 @@ try{
 			@endforeach
 		</select>
 	</div>
-	
-
 
 </div>
 <?php
 }
 catch(\Exception $ex)
 {
-	dd($ex->getMessage());
+	echo '<div style="display: none">';
+	echo $ex->getMessage();
+	echo $ex->__toString();
+	echo '</div>';
 }
 ?>
