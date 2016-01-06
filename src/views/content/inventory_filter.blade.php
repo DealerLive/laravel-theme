@@ -18,7 +18,8 @@ $configValue = \DealerLive\Config\Helper::check('inv_filter_toggles');
 
 if($configValue !== false)
 	$configContainer = json_decode($configValue);
-else
+
+if(!is_array($configContainer))
 	$configContainer = array();
 
 $config = null;
@@ -56,6 +57,7 @@ $requests = array(
 $years = Helpers::get_years($requests);
 
 rsort($years);
+
 }
 catch(\Exception $ex)
 {
@@ -147,14 +149,16 @@ function isSelected($object, $description = null, $value = null)
 try{
 ?>
 
-<div class="listing-navigation">
+<div class="listing-navigation" data-url="{{\Request::url()}}">
 	<div class="listing-navigation-title">
 		<h5>{{ \DealerLive\Config\Helper::check('store_name') }}</h5>
 		<h3>{{trans('inventory::vehicles.'.$type.'_vehicles')}}</h3>
 	</div>
 
+	<a class="btn btn-default pull-right" data-advanced-filter>Advanced Filter</a>
+
 	@if(property_exists($config, 'classification') && $config->classification)
-	<div class="listing-select" >
+	<div @if(\Request::has('afil')) style="display: none" data-hidden-filter="true" @endif class="listing-select" >
 		<h5>Classification</h5>
 		<select>
 			<option value="">{{trans('general.choose')}} {{trans('inventory::vehicles.classification')}}</option>
@@ -169,7 +173,7 @@ try{
 	</div>
 	@endif
 
-	<div class="listing-select" @if(!$config->make || count(Helpers::get_makes($type, \Request::get('classification')) <= 1)) style="display: none" @endif>
+	<div @if(\Request::has('afil')) style="display: none" @endif class="listing-select" @if(!$config->make || count(Helpers::get_makes($type, \Request::get('classification')) <= 1)) style="display: none" @endif>
 		<h5>{{trans('inventory::vehicles.make')}}</h5>
 		<select>
 			<option value="">{{trans('general.choose')}} {{trans('inventory::vehicles.make')}}</option>
@@ -182,7 +186,7 @@ try{
 		</select> 
 	</div>
 
-	<div class="listing-select" @if(!$config->model) style="display: none" @endif>
+	<div @if(\Request::has('afil')) style="display: none" data-hidden-filter="true" @endif class="listing-select" @if(!$config->model) style="display: none" @endif>
 		<h5>{{trans('inventory::vehicles.model')}}</h5>
 		<select>
 			<option value="{{getRequest('model', '')}}">{{trans('general.choose')}} {{trans('inventory::vehicles.model')}}</option>
@@ -200,7 +204,7 @@ try{
 
 	@if(\Request::has('model') && count($trims))
 
-	<div class="listing-select" @if(!$config->trim) style="display: none" @endif >
+	<div  @if(\Request::has('afil')) style="display: none" @endif class="listing-select" @if(!$config->trim) style="display: none" @endif >
 		<h5>{{trans('inventory::vehicles.trim')}}</h5>
 		<select>
 			<option value="{{getRequest('trim', '')}}">{{trans('general.choose')}} {{trans('inventory::vehicles.trim')}}</option>
@@ -216,7 +220,7 @@ try{
 	@endif
 
 	@if(\Request::has('model') && count($transmissions))
-	<div class="listing-select" @if(!$config->trans) style="display: none" @endif>
+	<div  @if(\Request::has('afil')) style="display: none" @endif class="listing-select" @if(!$config->trans) style="display: none" @endif>
 		<h5>{{trans('inventory::vehicles.transmission')}}</h5>
 		<select>
 			<option value="{{getRequest('trans', '')}}">{{trans('general.choose')}} {{trans('inventory::vehicles.transmission')}}</option>
@@ -230,7 +234,7 @@ try{
 	</div>
 	@endif
 
-	<div class="listing-select" @if(!$config->price) style="display: none" @endif>
+	<div @if(\Request::has('afil')) style="display: none" data-hidden-filter="true" @endif class="listing-select" @if(!$config->price) style="display: none" @endif>
 		<h5>{{trans('inventory::vehicles.price')}}</h5>
 		<select>
 		<option value="{{getRequest('price', '')}}">{{trans('general.choose')}} {{trans('inventory::vehicles.price')}}</option>
@@ -268,7 +272,7 @@ try{
 	</div>
 
 	
-	<div class="listing-select" @if(!$config->year) style="display: none" @endif>
+	<div @if(\Request::has('afil')) style="display: none" @endif class="listing-select" @if(!$config->year) style="display: none" @endif>
 		<h5>{{trans('inventory::vehicles.year')}}</h5>
 		<select>
 			<option value="{{getRequest('year', '')}}">{{trans('general.choose')}} {{trans('inventory::vehicles.year')}}</option>
@@ -281,6 +285,8 @@ try{
 		</select>
 	</div>
 	
+	@include('Theme::content.inventory_advanced_filter_horizontal')
+
 </div>
 <?php
 }
@@ -289,11 +295,3 @@ catch(\Exception $ex)
 	dd($ex->getMessage());
 }
 ?>
-<script type="text/javascript">
-	$(function(){
-	  $('.listing-select select').change(function(){ 
-	  	var url = '{{\Request::url()}}';
-	    window.location = ($(this).val() !== '') ? url+$(this).val() : url;
-	  });
-	});
-</script>
