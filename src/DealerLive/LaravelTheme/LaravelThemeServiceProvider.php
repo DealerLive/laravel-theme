@@ -61,6 +61,11 @@ class LaravelThemeServiceProvider extends ServiceProvider {
        \View::addNamespace('Theme', __DIR__.'/../../views/');
     }
 
+    public function boot()
+    {
+        \Asset::add('filter_js', asset('packages/dealer-live/laravel-theme/js/filters.js'));
+    }
+
     /**
      * Get the services provided by the provider.
      *
