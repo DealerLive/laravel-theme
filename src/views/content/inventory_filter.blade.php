@@ -158,8 +158,6 @@ try{
 		<h3>{{trans('inventory::vehicles.'.$type.'_vehicles')}}</h3>
 	</div>
 
-	<a class="btn btn-default pull-right" data-advanced-filter>Advanced Filter</a>
-
 	@if(property_exists($config, 'classification') && $config->classification)
 	<div @if(\Request::has('afil')) style="display: none" data-hidden-filter="true" @endif class="listing-select" >
 		<h5>Classification</h5>
