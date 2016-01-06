@@ -285,7 +285,7 @@ try{
 		</select>
 	</div>
 	
-	@include('Theme::content.inventory_advanced_filter_horizontal')
+
 
 </div>
 <?php
