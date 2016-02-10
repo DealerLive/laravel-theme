@@ -10,6 +10,8 @@ $min = Helpers::get_min_price(\Request::get('make'), \Request::get('model'), $ty
 $max = Helpers::get_max_price(\Request::get('make'), \Request::get('model'), $type);
 $trims = \Request::has('model') ? Helpers::get_trims(\Request::get('model'), $type) : array();
 $class_count = Helpers::getClassificationCounts($type);
+$catCount = Helpers::getCategoryCounts($type);
+
 $transmissions = \Request::has('model') ? Helpers::get_transmissions(\Request::get('model'), \Request::get('trim'), $type) : array();
 
 
@@ -39,7 +41,10 @@ if(!$config)
 	$config->trim = true;
 	$config->trans = true;
 	$config->year = false;
+	$config->category = true;
 }
+
+$config->category = true;
 
 //Collect all the values into an array for use with
 //some Helper methods, specifically the price range method
@@ -65,6 +70,7 @@ catch(\Exception $ex)
 	echo $ex->getMessage();
 	echo $ex->__toString();
 	echo '</div>';
+	echo '<script>alert("'.$ex->getMessage().'");</script>';
 }
 //Method generates a URL that maintains appropriate filters
 function getRequest($section, $value, $value2 = null)
@@ -157,6 +163,21 @@ try{
 		<h5>{{ \DealerLive\Config\Helper::check('store_name') }}</h5>
 		<h3>{{trans('inventory::vehicles.'.$type.'_vehicles')}}</h3>
 	</div>
+
+	@if(property_exists($config, 'category') && $config->category)
+	<div class="listing-select">
+		<h5>Category</h5>
+		<select>
+			<option value="">{{trans('general.choose')}} Category</option>
+			@foreach(Helpers::getCategories($type) as $cat)
+			<option value="?category={{$cat->category}}" @if(\Request::get('category') == $cat->category) selected @endif>
+				{{ucwords($cat->category)}}
+				{{($showCounts ? '('.$catCount[$cat->category].')' : '')}}
+			</option>
+			@endforeach
+		</select>
+	</div>
+	@endif
 
 	@if(property_exists($config, 'classification') && $config->classification)
 	<div @if(\Request::has('afil')) style="display: none" data-hidden-filter="true" @endif class="listing-select" >
