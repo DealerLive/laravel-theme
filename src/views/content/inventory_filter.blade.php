@@ -56,7 +56,9 @@ $requests = array(
 	'make' => \Request::get('make'),
 	'model' => \Request::get('model'),
 	'trim' => \Request::get('trim'),
-	'trans' => \Request::get('trans')
+	'trans' => \Request::get('trans'),
+	'category' => \Request::get('category'),
+	'classification' => \Request::get('classification'),
 );
 
 $years = Helpers::get_years($requests);
@@ -76,6 +78,9 @@ catch(\Exception $ex)
 function getRequest($section, $value, $value2 = null)
 {	
 	$segment = array();
+
+	if(\Request::has('category'))
+		$segment[] = 'category='.urlencode(\Request::get('category'));
 
 	if(\Request::has('classification'))
 		$segment[] = "classification=".urlencode(\Request::get('classification'));
@@ -184,7 +189,7 @@ try{
 		<h5>Classification</h5>
 		<select>
 			<option value="">{{trans('general.choose')}} {{trans('inventory::vehicles.classification')}}</option>
-			@foreach(Helpers::getClassifications($type) as $class)
+			@foreach(Helpers::getClassifications($type, \Request::get('category')) as $class)
 			@if(!isset($class_count[$class->classification])) <?php continue; ?> @endif
 			<option value="?classification={{$class->classification}}" @if($class->classification == \Request::get('classification')) selected @endif>
 				{{ucwords($class->classification)}}
@@ -199,7 +204,7 @@ try{
 		<h5>{{trans('inventory::vehicles.make')}}</h5>
 		<select>
 			<option value="">{{trans('general.choose')}} {{trans('inventory::vehicles.make')}}</option>
-			@foreach(Helpers::get_makes($type, \Request::get('classification')) as $make)
+			@foreach(Helpers::get_makes($type, \Request::get('classification'), \Request::get('category')) as $make)
 			<option value="?make={{$make->make}}&classification={{\Request::get('classification')}}" @if(isSelected($make)) selected @endif>
 				{{ $make->make }}
 				{{($showCounts) ? '('.Helpers::get_make_count($make->make, $type, \Request::get('classification')).')' : ''}}
@@ -212,13 +217,13 @@ try{
 		<h5>{{trans('inventory::vehicles.model')}}</h5>
 		<select>
 			<option value="{{getRequest('model', '')}}">{{trans('general.choose')}} {{trans('inventory::vehicles.model')}}</option>
-			@foreach(Helpers::get_models($type, \Request::get('make'), \Request::get('classification')) as $model)
-			@if(!Helpers::get_model_count($model->model, $type, \Request::get('make'), \Request::get('classification')))
+			@foreach(Helpers::get_models($type, \Request::get('make'), \Request::get('classification'), \Request::get('category')) as $model)
+			@if(!Helpers::get_model_count($model->model, $type, \Request::get('make'), \Request::get('classification'), \Request::get('category')))
 			<?php continue; ?>
 			@endif
 			<option value="{{getRequest('model', $model->model)}}" @if(isSelected($model)) selected @endif>
 				{{ $model->model }}
-				{{($showCounts) ? '('.Helpers::get_model_count($model->model, $type, \Request::get('make'), \Request::get('classification')).')' : ''}}
+				{{($showCounts) ? '('.Helpers::get_model_count($model->model, $type, \Request::get('make'), \Request::get('classification'), \Request::get('category')).')' : ''}}
 			</option>
 			@endforeach
 		</select> 
