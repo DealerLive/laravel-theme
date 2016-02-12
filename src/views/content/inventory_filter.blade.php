@@ -10,6 +10,8 @@ $min = Helpers::get_min_price(\Request::get('make'), \Request::get('model'), $ty
 $max = Helpers::get_max_price(\Request::get('make'), \Request::get('model'), $type);
 $trims = \Request::has('model') ? Helpers::get_trims(\Request::get('model'), $type) : array();
 $class_count = Helpers::getClassificationCounts($type);
+$catCount = Helpers::getCategoryCounts($type);
+
 $transmissions = \Request::has('model') ? Helpers::get_transmissions(\Request::get('model'), \Request::get('trim'), $type) : array();
 
 
@@ -39,7 +41,10 @@ if(!$config)
 	$config->trim = true;
 	$config->trans = true;
 	$config->year = false;
+	$config->category = true;
 }
+
+$config->category = true;
 
 //Collect all the values into an array for use with
 //some Helper methods, specifically the price range method
@@ -51,7 +56,9 @@ $requests = array(
 	'make' => \Request::get('make'),
 	'model' => \Request::get('model'),
 	'trim' => \Request::get('trim'),
-	'trans' => \Request::get('trans')
+	'trans' => \Request::get('trans'),
+	'category' => \Request::get('category'),
+	'classification' => \Request::get('classification'),
 );
 
 $years = Helpers::get_years($requests);
@@ -65,11 +72,15 @@ catch(\Exception $ex)
 	echo $ex->getMessage();
 	echo $ex->__toString();
 	echo '</div>';
+	echo '<script>alert("'.$ex->getMessage().'");</script>';
 }
 //Method generates a URL that maintains appropriate filters
 function getRequest($section, $value, $value2 = null)
 {	
 	$segment = array();
+
+	if(\Request::has('category'))
+		$segment[] = 'category='.urlencode(\Request::get('category'));
 
 	if(\Request::has('classification'))
 		$segment[] = "classification=".urlencode(\Request::get('classification'));
@@ -158,12 +169,27 @@ try{
 		<h3>{{trans('inventory::vehicles.'.$type.'_vehicles')}}</h3>
 	</div>
 
+	@if(property_exists($config, 'category') && $config->category)
+	<div class="listing-select">
+		<h5>Category</h5>
+		<select>
+			<option value="">{{trans('general.choose')}} Category</option>
+			@foreach(Helpers::getCategories($type) as $cat)
+			<option value="?category={{$cat->category}}" @if(\Request::get('category') == $cat->category) selected @endif>
+				{{ucwords($cat->category)}}
+				{{($showCounts ? '('.$catCount[$cat->category].')' : '')}}
+			</option>
+			@endforeach
+		</select>
+	</div>
+	@endif
+
 	@if(property_exists($config, 'classification') && $config->classification)
 	<div @if(\Request::has('afil')) style="display: none" data-hidden-filter="true" @endif class="listing-select" >
 		<h5>Classification</h5>
 		<select>
 			<option value="">{{trans('general.choose')}} {{trans('inventory::vehicles.classification')}}</option>
-			@foreach(Helpers::getClassifications($type) as $class)
+			@foreach(Helpers::getClassifications($type, \Request::get('category')) as $class)
 			@if(!isset($class_count[$class->classification])) <?php continue; ?> @endif
 			<option value="?classification={{$class->classification}}" @if($class->classification == \Request::get('classification')) selected @endif>
 				{{ucwords($class->classification)}}
@@ -178,7 +204,7 @@ try{
 		<h5>{{trans('inventory::vehicles.make')}}</h5>
 		<select>
 			<option value="">{{trans('general.choose')}} {{trans('inventory::vehicles.make')}}</option>
-			@foreach(Helpers::get_makes($type, \Request::get('classification')) as $make)
+			@foreach(Helpers::get_makes($type, \Request::get('classification'), \Request::get('category')) as $make)
 			<option value="?make={{$make->make}}&classification={{\Request::get('classification')}}" @if(isSelected($make)) selected @endif>
 				{{ $make->make }}
 				{{($showCounts) ? '('.Helpers::get_make_count($make->make, $type, \Request::get('classification')).')' : ''}}
@@ -191,13 +217,13 @@ try{
 		<h5>{{trans('inventory::vehicles.model')}}</h5>
 		<select>
 			<option value="{{getRequest('model', '')}}">{{trans('general.choose')}} {{trans('inventory::vehicles.model')}}</option>
-			@foreach(Helpers::get_models($type, \Request::get('make'), \Request::get('classification')) as $model)
-			@if(!Helpers::get_model_count($model->model, $type, \Request::get('make'), \Request::get('classification')))
+			@foreach(Helpers::get_models($type, \Request::get('make'), \Request::get('classification'), \Request::get('category')) as $model)
+			@if(!Helpers::get_model_count($model->model, $type, \Request::get('make'), \Request::get('classification'), \Request::get('category')))
 			<?php continue; ?>
 			@endif
 			<option value="{{getRequest('model', $model->model)}}" @if(isSelected($model)) selected @endif>
 				{{ $model->model }}
-				{{($showCounts) ? '('.Helpers::get_model_count($model->model, $type, \Request::get('make'), \Request::get('classification')).')' : ''}}
+				{{($showCounts) ? '('.Helpers::get_model_count($model->model, $type, \Request::get('make'), \Request::get('classification'), \Request::get('category')).')' : ''}}
 			</option>
 			@endforeach
 		</select> 
