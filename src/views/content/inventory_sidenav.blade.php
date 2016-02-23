@@ -15,7 +15,7 @@ function hasProperty($vehicles, $property, $value)
 //Variables used to filter the results
 $type = (array_key_exists('type', $params)) ? $params['type'] : "all";
 $showCounts = (array_key_exists('counts', $params)) ? $params['counts'] : false;
-$make_count = Helpers::get_all_makes_count($type, \Request::get('classification'));
+$make_count = Helpers::getMakes($type, \Request::get('classification'));
 $class_count = Helpers::getClassificationCounts($type);
 	
 //Load options (fallback to defaults if no options saved)
