@@ -133,7 +133,7 @@ if(!$config)
 		@if(Helpers::get_model_count($v->model, $type))
 		<li>
 			<a href="{{ URL::route('inventory', $type)}}?page=1&make={{Request::get('make').'&model='.$v->model }}&classification={{\Request::get('classification')}}{{\Request::get('q') ? '&q='.\Request::get('q') : null}}">
-				{{ ucwords(strtolower($v->model)) }} 
+				{{$v->model}} 
 				@if($showCounts)
 					({{Helpers::get_model_count($v->model, $type)}})
 				@endif
