@@ -170,6 +170,7 @@ try{
 	</div>
 
 	@if(property_exists($config, 'category') && $config->category)
+	@if(Helpers::getCategories($type))
 	<div class="listing-select">
 		<h5>Category</h5>
 		<select>
@@ -182,6 +183,7 @@ try{
 			@endforeach
 		</select>
 	</div>
+	@endif
 	@endif
 
 	@if(property_exists($config, 'classification') && $config->classification)
