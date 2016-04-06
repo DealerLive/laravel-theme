@@ -200,7 +200,7 @@ try{
 	</div>
 	@endif
 
-	<div @if(\Request::has('afil')) style="display: none" @endif class="listing-select" @if(!$config->make || count(Helpers::get_makes($type, \Request::get('classification')) <= 1)) style="display: none" @endif>
+	<div @if(\Request::has('afil')) style="display: none" @endif class="listing-select" @if(!$config->make) style="display: none" @endif>
 		<h5>{{trans('inventory::vehicles.make')}}</h5>
 		<select>
 			<option value="">{{trans('general.choose')}} {{trans('inventory::vehicles.make')}}</option>
