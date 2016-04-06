@@ -170,6 +170,7 @@ try{
 	</div>
 
 	@if(property_exists($config, 'category') && $config->category)
+	@if(Helpers::getCategories($type))
 	<div class="listing-select">
 		<h5>Category</h5>
 		<select>
@@ -182,6 +183,7 @@ try{
 			@endforeach
 		</select>
 	</div>
+	@endif
 	@endif
 
 	@if(property_exists($config, 'classification') && $config->classification)
@@ -200,7 +202,7 @@ try{
 	</div>
 	@endif
 
-	<div @if(\Request::has('afil')) style="display: none" @endif class="listing-select" @if(!$config->make || count(Helpers::get_makes($type, \Request::get('classification')) <= 1)) style="display: none" @endif>
+	<div @if(\Request::has('afil')) style="display: none" @endif class="listing-select" @if(!$config->make) style="display: none" @endif>
 		<h5>{{trans('inventory::vehicles.make')}}</h5>
 		<select>
 			<option value="">{{trans('general.choose')}} {{trans('inventory::vehicles.make')}}</option>

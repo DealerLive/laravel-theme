@@ -39,6 +39,7 @@ class LaravelThemeServiceProvider extends ServiceProvider {
                 );
         });
 
+       /*
        \Event::listen('cms.edit-mode', function($data)
         {   
             if(\Auth::check() && !$data->isHidden())
@@ -52,7 +53,7 @@ class LaravelThemeServiceProvider extends ServiceProvider {
                     \Theme::addEditButton($data->getContent());
                 \Theme::increaseEditNavigationCount(35);
             }
-        });
+        });*/
 
        if(class_exists('\DealerLive\Core\Classes\Package'))
             \Event::fire('core.packages', array(new \DealerLive\Core\Classes\Package('Laravel-Theme', 'dealer-live/laravel-theme', false)));
