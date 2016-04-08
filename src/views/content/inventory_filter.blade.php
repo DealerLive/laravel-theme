@@ -202,6 +202,7 @@ try{
 	</div>
 	@endif
 
+	@if(count(Helpers::get_makes($type, \Request::get('classification'), \Request::get('category'))) > 1)
 	<div @if(\Request::has('afil')) style="display: none" @endif class="listing-select" @if(!$config->make) style="display: none" @endif>
 		<h5>{{trans('inventory::vehicles.make')}}</h5>
 		<select>
@@ -214,6 +215,7 @@ try{
 			@endforeach
 		</select> 
 	</div>
+	@endif
 
 	<div @if(\Request::has('afil')) style="display: none" data-hidden-filter="true" @endif class="listing-select" @if(!$config->model) style="display: none" @endif>
 		<h5>{{trans('inventory::vehicles.model')}}</h5>
