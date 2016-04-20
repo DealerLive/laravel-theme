@@ -168,7 +168,7 @@ try{
 		<h5>{{ \DealerLive\Config\Helper::check('store_name') }}</h5>
 		<h3>{{trans('inventory::vehicles.'.$type.'_vehicles')}}</h3>
 	</div>
-
+	{{-- 
 	@if(property_exists($config, 'category') && $config->category)
 	@if(Helpers::getCategories($type))
 	<div class="listing-select">
@@ -184,7 +184,7 @@ try{
 		</select>
 	</div>
 	@endif
-	@endif
+	@endif --}}
 
 	@if(property_exists($config, 'classification') && $config->classification)
 	<div @if(\Request::has('afil')) style="display: none" data-hidden-filter="true" @endif class="listing-select" >
@@ -330,10 +330,6 @@ catch(\Exception $ex)
 $(function(){	
 	$('.listing-select select').change(function(){ 
 	  	var url = '{{\Request::url()}}';
-	    window.location = ($(this).val() !== '') ? url+$(this).val() : url;
-	 });
-});
-</script>equest::url()}}';
 	    window.location = ($(this).val() !== '') ? url+$(this).val() : url;
 	 });
 });
