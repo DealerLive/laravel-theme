@@ -165,6 +165,7 @@ class Theme
 
     public static function content($blade, $params = array())
     {
+
         if(\View::exists('Theme::content.'.$blade))
         {
             try
@@ -173,7 +174,10 @@ class Theme
             }
             catch(\Exception $ex)
             {
-                return null;
+                if(\Auth::check())
+                    return $ex;
+                else
+                    return null;
             }
             
             return $markup;

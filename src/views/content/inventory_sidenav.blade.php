@@ -26,6 +26,9 @@ if($configValue !== false)
 else
 	$configContainer = array();
 
+if(!is_array($configContainer))
+	$configContainer = [];
+
 $config = null;
 
 //Find the config that matches the current type
@@ -52,6 +55,7 @@ if(!$config)
 <div id="listings-sidebar">
 
 	@if($type == 'all' || (property_exists($config, 'classification') && $config->classification))
+	@if(count(Helpers::getClassifications($type)) > 1)
 	<ul class="listing-navigation">
 		<h4>Classification</h4>
 		@if(!\Request::get('classification'))
@@ -90,6 +94,7 @@ if(!$config)
 		@endif
 	</ul>
 	@endif
+	@endif
 
 	<ul class="listing-navigation">
 		<h4>Make</h4>
@@ -126,6 +131,7 @@ if(!$config)
 	@if (Request::get('make') || $type == "new")
 	<ul class="listing-navigation">
 		<h4>Model</h4>
+
 		@foreach(Helpers::get_models($type, Request::get('make'), \Request::get('classification')) as $v)
 		@if(\Request::get('q') && !hasProperty($params['vehicles'], 'model', $v->model))
 			<?php continue; ?>
