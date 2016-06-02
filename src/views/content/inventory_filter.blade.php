@@ -178,7 +178,7 @@ try{
 			@foreach(Helpers::getCategories($type) as $cat)
 			<option value="?category={{$cat->category}}" @if(\Request::get('category') == $cat->category) selected @endif>
 				{{ucwords($cat->category)}}
-				{{($showCounts ? '('.array_key_exists($cat->category, $catCount) ? $catCount[$cat->category] : 0).')' : '')}}
+				{{($showCounts ? '('.(array_key_exists($cat->category, $catCount) ? $catCount[$cat->category] : 0).')' : '')}}
 			</option>
 			@endforeach
 		</select>
@@ -195,7 +195,7 @@ try{
 			@if(!isset($class_count[$class->classification])) <?php continue; ?> @endif
 			<option value="?classification={{$class->classification}}" @if($class->classification == \Request::get('classification')) selected @endif>
 				{{ucwords($class->classification)}}
-				{{($showCounts ? '('.array_key_exists($class->classification, $class_count) ? $class_count[$class->classification] : 0).')' : '')}}
+				{{($showCounts ? '('.(array_key_exists($class->classification, $class_count) ? $class_count[$class->classification] : 0).')' : '')}}
 			</option>
 			@endforeach
 		</select>
