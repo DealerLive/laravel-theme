@@ -176,10 +176,12 @@ try{
 		<select>
 			<option value="">{{trans('general.choose')}} Category</option>
 			@foreach(Helpers::getCategories($type) as $cat)
+			@if(array_key_exists($cat->category, $catCount) && $catCount[$cat->category])
 			<option value="?category={{$cat->category}}" @if(\Request::get('category') == $cat->category) selected @endif>
 				{{ucwords($cat->category)}}
 				{{($showCounts ? '('.(array_key_exists($cat->category, $catCount) ? $catCount[$cat->category] : 0).')' : '')}}
 			</option>
+			@endif
 			@endforeach
 		</select>
 	</div>
