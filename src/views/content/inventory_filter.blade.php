@@ -168,23 +168,25 @@ try{
 		<h5>{{ \DealerLive\Config\Helper::check('store_name') }}</h5>
 		<h3>{{trans('inventory::vehicles.'.$type.'_vehicles')}}</h3>
 	</div>
-	{{-- 
+	
 	@if(property_exists($config, 'category') && $config->category)
-	@if(Helpers::getCategories($type))
+	@if(Helpers::getCategories($type) && count($catCount))
 	<div class="listing-select">
 		<h5>Category</h5>
 		<select>
 			<option value="">{{trans('general.choose')}} Category</option>
 			@foreach(Helpers::getCategories($type) as $cat)
+			@if(array_key_exists($cat->category, $catCount) && $catCount[$cat->category])
 			<option value="?category={{$cat->category}}" @if(\Request::get('category') == $cat->category) selected @endif>
 				{{ucwords($cat->category)}}
-				{{($showCounts ? '('.$catCount[$cat->category].')' : '')}}
+				{{($showCounts ? '('.(array_key_exists($cat->category, $catCount) ? $catCount[$cat->category] : 0).')' : '')}}
 			</option>
+			@endif
 			@endforeach
 		</select>
 	</div>
 	@endif
-	@endif --}}
+	@endif
 
 	@if(property_exists($config, 'classification') && $config->classification)
 	<div @if(\Request::has('afil')) style="display: none" data-hidden-filter="true" @endif class="listing-select" >
@@ -195,7 +197,7 @@ try{
 			@if(!isset($class_count[$class->classification])) <?php continue; ?> @endif
 			<option value="?classification={{$class->classification}}" @if($class->classification == \Request::get('classification')) selected @endif>
 				{{ucwords($class->classification)}}
-				{{($showCounts ? '('.$class_count[$class->classification].')' : '')}}
+				{{($showCounts ? '('.(array_key_exists($class->classification, $class_count) ? $class_count[$class->classification] : 0).')' : '')}}
 			</option>
 			@endforeach
 		</select>
