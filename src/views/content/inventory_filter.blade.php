@@ -170,7 +170,7 @@ try{
 	</div>
 	
 	@if(property_exists($config, 'category') && $config->category)
-	@if(Helpers::getCategories($type))
+	@if(Helpers::getCategories($type) && count($catCount))
 	<div class="listing-select">
 		<h5>Category</h5>
 		<select>
