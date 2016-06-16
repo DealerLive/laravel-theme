@@ -105,10 +105,10 @@ function getRequest($section, $value, $value2 = null)
 	elseif($section == 'price')
 	{
 		if($value)
-			$segment[] = "minprice=".urlencode($value);
+			$segment[] = "min-price=".urlencode($value);
 
 		if($value2)
-			$segment[] = "maxprice=".urlencode($value2);
+			$segment[] = "max-price=".urlencode($value2);
 	}
 	elseif($section == 'trim')
 	{
@@ -136,10 +136,10 @@ function isSelected($object, $description = null, $value = null)
 	if(is_null($object))
 		$object = new \stdClass();
 
-	if($description == "max" && \Request::get('maxprice') == $value)
+	if($description == "max" && \Request::get('max-price') == $value)
 		return true;
 
-	if($description == "min" && \Request::get('minprice') == $value)
+	if($description == "min" && \Request::get('min-price') == $value)
 		return true;
 	
 	if($description == "trim" && \Request::get('trim') == $value)
